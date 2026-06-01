@@ -5,6 +5,15 @@ app_description = "evolution de l\'app myconso"
 app_email = "testgrace29@gmail.com"
 app_license = "mit"
 
+after_install = "myconso2.myconso2.setup.after_install"
+
+fixtures = [
+    {
+        "doctype": "Workspace",
+        "filters": [["name", "=", "Myconso2"]]
+    }
+]
+
 # Apps
 # ------------------
 
@@ -25,7 +34,7 @@ app_license = "mit"
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/myconso2/css/myconso2.css"
+app_include_css = "/assets/myconso2/css/myconso2.css"
 # app_include_js = "/assets/myconso2/js/myconso2.js"
 
 # include js, css files in header of web template

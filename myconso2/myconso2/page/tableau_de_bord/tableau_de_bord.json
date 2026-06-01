@@ -1,0 +1,24 @@
+{
+ "content": null,
+ "creation": "2026-05-19 14:24:23.917923",
+ "docstatus": 0,
+ "doctype": "Page",
+ "icon": "layout-dashboard",
+ "idx": 0,
+ "modified": "2026-05-19 14:24:23.917923",
+ "modified_by": "Administrator",
+ "module": "Myconso2",
+ "name": "tableau-de-bord",
+ "owner": "Administrator",
+ "page_name": "tableau-de-bord",
+ "roles": [
+  {
+   "role": "Chef"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "tableau-de-bord"
+}

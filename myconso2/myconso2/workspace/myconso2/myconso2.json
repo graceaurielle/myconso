@@ -1,0 +1,157 @@
+{
+ "charts": [],
+ "content": null,
+ "creation": "2026-05-19 00:00:00.000000",
+ "custom_blocks": [],
+ "developer_mode_only": 0,
+ "disable_user_customization": 0,
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "extends": null,
+ "extends_another_page": 0,
+ "hide_custom": 0,
+ "icon": "folder",
+ "idx": 0,
+ "is_default": 0,
+ "is_hidden": 0,
+ "label": "Myconso2",
+ "links": [
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "icon": "dashboard",
+   "is_query_report": 0,
+   "label": "Tableau de Bord",
+   "link_to": "tableau-de-bord",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "icon": "home",
+   "is_query_report": 0,
+   "label": "Index",
+   "link_to": "index",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "icon": "file",
+   "is_query_report": 0,
+   "label": "Facture",
+   "link_to": "facture-conso",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "icon": "bar-chart",
+   "is_query_report": 0,
+   "label": "Statistiques",
+   "link_to": "statistiques",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "icon": "activity",
+   "is_query_report": 0,
+   "label": "Empreinte Carbone",
+   "link_to": "conso-empreinte-carb",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "icon": "users",
+   "is_query_report": 0,
+   "label": "Utilisateurs",
+   "link_to": "utilisateurs-myconso",
+   "link_type": "Page",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "dependencies": "",
+   "hidden": 0,
+   "icon": "settings",
+   "is_query_report": 0,
+   "label": "Paramètres",
+   "link_to": "Parametre Myconso",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-05-20 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Myconso2",
+ "name": "Myconso2",
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "roles": [],
+ "sequence_id": 1,
+ "shortcuts": [
+  {
+   "color": "Blue",
+   "doc_view": "",
+   "format": "",
+   "label": "Tableau de Bord",
+   "link_to": "tableau-de-bord",
+   "type": "Page"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "",
+   "format": "",
+   "label": "Index",
+   "link_to": "index",
+   "type": "Page"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "",
+   "format": "",
+   "label": "Facture",
+   "link_to": "facture-conso",
+   "type": "Page"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "",
+   "format": "",
+   "label": "Statistiques",
+   "link_to": "statistiques",
+   "type": "Page"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "",
+   "format": "",
+   "label": "Empreinte Carbone",
+   "link_to": "conso-empreinte-carb",
+   "type": "Page"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "",
+   "format": "",
+   "label": "Utilisateurs",
+   "link_to": "utilisateurs-myconso",
+   "type": "Page"
+  }
+ ],
+ "title": "Myconso2"
+}

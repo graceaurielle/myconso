@@ -1,0 +1,26 @@
+{
+ "content": null,
+ "creation": "2026-05-20 12:33:46.767887",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2026-05-20 12:33:46.767887",
+ "modified_by": "Administrator",
+ "module": "Myconso2",
+ "name": "conso-empreinte-carb",
+ "owner": "Administrator",
+ "page_name": "conso-empreinte-carb",
+ "roles": [
+  {
+   "role": "Chef"
+  },
+  {
+   "role": "Statisticien"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "conso empreinte carbone"
+}

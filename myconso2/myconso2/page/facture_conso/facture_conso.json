@@ -1,0 +1,26 @@
+{
+ "content": null,
+ "creation": "2026-05-19 22:57:29.233174",
+ "docstatus": 0,
+ "doctype": "Page",
+ "idx": 0,
+ "modified": "2026-05-19 22:57:29.233174",
+ "modified_by": "Administrator",
+ "module": "Myconso2",
+ "name": "facture-conso",
+ "owner": "Administrator",
+ "page_name": "facture-conso",
+ "roles": [
+  {
+   "role": "Chef"
+  },
+  {
+   "role": "Statisticien"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "facture conso"
+}

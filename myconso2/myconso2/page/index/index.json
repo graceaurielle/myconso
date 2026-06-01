@@ -1,0 +1,30 @@
+{
+ "content": null,
+ "creation": "2026-05-19 13:45:22.499055",
+ "docstatus": 0,
+ "doctype": "Page",
+ "icon": "gauge",
+ "idx": 0,
+ "modified": "2026-05-19 13:48:42.739330",
+ "modified_by": "Administrator",
+ "module": "Myconso2",
+ "name": "index",
+ "owner": "Administrator",
+ "page_name": "index",
+ "roles": [
+  {
+   "role": "Chef"
+  },
+  {
+   "role": "Statisticien"
+  },
+  {
+   "role": "Collecteur"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "index"
+}

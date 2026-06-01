@@ -1,0 +1,24 @@
+{
+ "content": null,
+ "creation": "2026-05-19 13:54:49.549737",
+ "docstatus": 0,
+ "doctype": "Page",
+ "icon": "activity",
+ "idx": 0,
+ "modified": "2026-05-19 13:54:49.549737",
+ "modified_by": "Administrator",
+ "module": "Myconso2",
+ "name": "statistiques",
+ "owner": "Administrator",
+ "page_name": "statistiques",
+ "roles": [
+  {
+   "role": "Statisticien"
+  }
+ ],
+ "script": null,
+ "standard": "Yes",
+ "style": null,
+ "system_page": 0,
+ "title": "statistique"
+}
