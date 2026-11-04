@@ -4,7 +4,7 @@
  "docstatus": 0,
  "doctype": "Page",
  "idx": 0,
- "modified": "2026-05-20 12:33:46.767887",
+ "modified": "2026-11-04 19:45:35.366964",
  "modified_by": "Administrator",
  "module": "Myconso2",
  "name": "conso-empreinte-carb",
@@ -15,7 +15,7 @@
    "role": "Chef"
   },
   {
-   "role": "Statisticien"
+   "role": "Staticien"
   }
  ],
  "script": null,

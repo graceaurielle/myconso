@@ -5,7 +5,7 @@
  "doctype": "Page",
  "icon": "layout-dashboard",
  "idx": 0,
- "modified": "2026-05-19 14:24:23.917923",
+ "modified": "2026-11-04 19:45:28.480814",
  "modified_by": "Administrator",
  "module": "Myconso2",
  "name": "tableau-de-bord",
@@ -14,6 +14,12 @@
  "roles": [
   {
    "role": "Chef"
+  },
+  {
+   "role": "Collecteur"
+  },
+  {
+   "role": "Staticien"
   }
  ],
  "script": null,

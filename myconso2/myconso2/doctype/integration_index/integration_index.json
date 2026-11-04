@@ -1,0 +1,207 @@
+{
+ "actions": [],
+ "autoname": "format:INT-IDX-{####}",
+ "creation": "2026-11-04 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "titre",
+  "statut",
+  "section_fichier",
+  "fichier",
+  "feuille",
+  "ligne_entete",
+  "section_mapping",
+  "col_date",
+  "col_heure",
+  "col_index",
+  "heure_defaut",
+  "ignorer_doublons",
+  "section_resume",
+  "nb_lignes",
+  "nb_valides",
+  "nb_avertissements",
+  "col_resume",
+  "nb_doublons",
+  "nb_erreurs",
+  "nb_importes",
+  "section_journal",
+  "lignes"
+ ],
+ "fields": [
+  {
+   "fieldname": "titre",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Titre",
+   "reqd": 1
+  },
+  {
+   "default": "Brouillon",
+   "fieldname": "statut",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Statut",
+   "options": "Brouillon\nAnalys\u00e9\nImport\u00e9\nImport\u00e9 partiellement",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_fichier",
+   "fieldtype": "Section Break",
+   "label": "Fichier source"
+  },
+  {
+   "description": "Fichier .xls ou .xlsx contenant les anciens index",
+   "fieldname": "fichier",
+   "fieldtype": "Attach",
+   "label": "Fichier Excel",
+   "reqd": 1
+  },
+  {
+   "description": "Laisser vide pour la premi\u00e8re feuille",
+   "fieldname": "feuille",
+   "fieldtype": "Data",
+   "label": "Nom de la feuille"
+  },
+  {
+   "default": "1",
+   "description": "Num\u00e9ro de la ligne contenant les titres de colonnes",
+   "fieldname": "ligne_entete",
+   "fieldtype": "Int",
+   "label": "Ligne d'en-t\u00eate"
+  },
+  {
+   "fieldname": "section_mapping",
+   "fieldtype": "Section Break",
+   "label": "Correspondance des colonnes"
+  },
+  {
+   "description": "D\u00e9tect\u00e9e automatiquement si vide (ex. : Date)",
+   "fieldname": "col_date",
+   "fieldtype": "Data",
+   "label": "Colonne Date"
+  },
+  {
+   "description": "Optionnelle. Si absente, l'heure par d\u00e9faut est utilis\u00e9e",
+   "fieldname": "col_heure",
+   "fieldtype": "Data",
+   "label": "Colonne Heure"
+  },
+  {
+   "description": "D\u00e9tect\u00e9e automatiquement si vide (ex. : Index)",
+   "fieldname": "col_index",
+   "fieldtype": "Data",
+   "label": "Colonne Index"
+  },
+  {
+   "default": "00:00:00",
+   "fieldname": "heure_defaut",
+   "fieldtype": "Time",
+   "label": "Heure par d\u00e9faut"
+  },
+  {
+   "default": "1",
+   "description": "Ne pas recr\u00e9er un index d\u00e9j\u00e0 pr\u00e9sent (m\u00eame date, heure et valeur)",
+   "fieldname": "ignorer_doublons",
+   "fieldtype": "Check",
+   "label": "Ignorer les doublons"
+  },
+  {
+   "fieldname": "section_resume",
+   "fieldtype": "Section Break",
+   "label": "R\u00e9sum\u00e9"
+  },
+  {
+   "fieldname": "nb_lignes",
+   "fieldtype": "Int",
+   "label": "Lignes lues",
+   "read_only": 1
+  },
+  {
+   "fieldname": "nb_valides",
+   "fieldtype": "Int",
+   "label": "Valides",
+   "read_only": 1
+  },
+  {
+   "fieldname": "nb_avertissements",
+   "fieldtype": "Int",
+   "label": "Avertissements",
+   "read_only": 1
+  },
+  {
+   "fieldname": "col_resume",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "nb_doublons",
+   "fieldtype": "Int",
+   "label": "Doublons",
+   "read_only": 1
+  },
+  {
+   "fieldname": "nb_erreurs",
+   "fieldtype": "Int",
+   "label": "Erreurs",
+   "read_only": 1
+  },
+  {
+   "fieldname": "nb_importes",
+   "fieldtype": "Int",
+   "label": "Import\u00e9s",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_journal",
+   "fieldtype": "Section Break",
+   "label": "D\u00e9tail des lignes"
+  },
+  {
+   "fieldname": "lignes",
+   "fieldtype": "Table",
+   "label": "Lignes",
+   "options": "Integration Index Ligne",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-11-04 19:45:43.540896",
+ "modified_by": "Administrator",
+ "module": "Myconso2",
+ "name": "Integration Index",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Chef",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "titre"
+}

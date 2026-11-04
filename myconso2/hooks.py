@@ -152,23 +152,11 @@ app_include_css = "/assets/myconso2/css/myconso2.css"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"myconso2.tasks.all"
-# 	],
-# 	"daily": [
-# 		"myconso2.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"myconso2.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"myconso2.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"myconso2.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+	"hourly": [
+		"myconso2.myconso2.tasks.record_hourly_weather"
+	],
+}
 
 # Testing
 # -------

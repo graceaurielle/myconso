@@ -829,40 +829,177 @@ def get_empreinte_carbone_data(period='semaine', date_from=None, date_to=None):
     }
 
 
-@frappe.whitelist()
-def get_weather_data(lat, lon):
-    import requests
+# ── Météo ────────────────────────────────────────────────────────────────────
+
+# Mapping WMO weather code → (description FR, emoji)
+_WMO_LABELS = {
+    0:  ('Ciel clair',              '☀️'),
+    1:  ('Principalement dégagé',   '🌤️'),
+    2:  ('Partiellement nuageux',   '⛅'),
+    3:  ('Couvert',                 '☁️'),
+    45: ('Brouillard',              '🌫️'),
+    48: ('Brouillard givrant',      '🌫️'),
+    51: ('Bruine légère',           '🌦️'),
+    53: ('Bruine modérée',          '🌦️'),
+    55: ('Bruine dense',            '🌧️'),
+    61: ('Pluie légère',            '🌦️'),
+    63: ('Pluie modérée',           '🌧️'),
+    65: ('Pluie forte',             '🌧️'),
+    71: ('Neige légère',            '🌨️'),
+    73: ('Neige modérée',           '❄️'),
+    75: ('Neige forte',             '❄️'),
+    77: ('Grésil',                  '🌨️'),
+    80: ('Averses légères',         '🌦️'),
+    81: ('Averses modérées',        '🌧️'),
+    82: ('Averses violentes',       '⛈️'),
+    85: ('Averses de neige légères','🌨️'),
+    86: ('Averses de neige fortes', '❄️'),
+    95: ('Orage',                   '⛈️'),
+    96: ('Orage avec grêle légère', '⛈️'),
+    99: ('Orage violent avec grêle','🌩️'),
+}
+
+
+def _save_meteo_record(data):
+    """Sauvegarde un enregistrement météo si aucune entrée n'existe pour la même heure."""
     try:
+        now_dt = frappe.utils.now_datetime()
+        today  = str(now_dt.date())
+        hour   = now_dt.strftime('%H:00:00')
+        lat    = data.get('latitude', 0)
+        lon    = data.get('longitude', 0)
+
+        # Évite les doublons : une entrée par heure et par localisation (arrondie au degré)
+        already = frappe.db.exists('Meteorologie', {
+            'date_meteo': today,
+            'heure_meteo': ['between', [f'{now_dt.hour:02d}:00:00', f'{now_dt.hour:02d}:59:59']],
+            'latitude':  ['between', [round(float(lat), 1) - 0.2, round(float(lat), 1) + 0.2]],
+        })
+        if already:
+            return
+
+        frappe.get_doc({
+            'doctype':              'Meteorologie',
+            'date_meteo':           today,
+            'heure_meteo':          hour,
+            'temperature':          data.get('temperature'),
+            'temperature_ressentie': data.get('feels_like'),
+            'humidite':             data.get('humidity'),
+            'vitesse_vent':         data.get('wind_speed'),
+            'precipitation':        data.get('precipitation', 0),
+            'weather_code':         data.get('weather_code'),
+            'weather_label':        data.get('weather_label'),
+            'weather_icon':         data.get('weather_icon'),
+            'ville':                data.get('city', ''),
+            'latitude':             float(lat),
+            'longitude':            float(lon),
+        }).insert(ignore_permissions=True)
+        frappe.db.commit()
+    except Exception:
+        pass  # Ne jamais bloquer l'affichage pour une erreur de log
+
+
+@frappe.whitelist()
+def get_current_weather(lat, lon):
+    """Retourne la météo actuelle depuis Open-Meteo + reverse geocoding Nominatim.
+
+    Paramètres :
+        lat  -- latitude (float ou str)
+        lon  -- longitude (float ou str)
+
+    Retourne un dict structuré avec weather_label, weather_icon, feels_like,
+    precipitation, etc. ; sauvegarde automatiquement en table Meteorologie.
+    """
+    import requests
+
+    try:
+        lat_f = float(lat)
+        lon_f = float(lon)
+
+        # ── Open-Meteo ─────────────────────────────────────────────────────────
         weather_url = (
             f"https://api.open-meteo.com/v1/forecast"
-            f"?latitude={lat}&longitude={lon}"
-            f"&current=temperature_2m,weathercode,apparent_temperature,windspeed_10m,relativehumidity_2m"
+            f"?latitude={lat_f}&longitude={lon_f}"
+            f"&current=temperature_2m,apparent_temperature,relativehumidity_2m,"
+            f"precipitation,weathercode,windspeed_10m"
             f"&timezone=auto"
         )
-        weather = requests.get(weather_url, timeout=6).json()
+        weather_resp = requests.get(weather_url, timeout=8).json()
+        cur          = weather_resp.get('current', {})
 
-        geo_url = (
-            f"https://nominatim.openstreetmap.org/reverse"
-            f"?lat={lat}&lon={lon}&format=json&accept-language=fr"
-        )
-        geo = requests.get(
-            geo_url,
-            headers={'User-Agent': 'Myconso2-Frappe/1.0'},
-            timeout=6,
-        ).json()
+        code              = cur.get('weathercode', 0) or 0
+        label, icon       = _WMO_LABELS.get(int(code), ('Conditions inconnues', '🌡️'))
+        local_time        = cur.get('time', frappe.utils.now())
 
-        addr = geo.get('address', {})
-        city = (addr.get('city') or addr.get('town') or
-                addr.get('municipality') or addr.get('village') or '')
-        country = addr.get('country_code', '').upper()
-        cur = weather.get('current', {})
-        return {
-            'temperature': cur.get('temperature_2m'),
-            'weathercode': cur.get('weathercode'),
-            'windspeed': cur.get('windspeed_10m'),
-            'humidity': cur.get('relativehumidity_2m'),
-            'city': city,
-            'country': country,
+        # ── Reverse geocoding Nominatim ────────────────────────────────────────
+        city = ''
+        try:
+            geo_url = (
+                f"https://nominatim.openstreetmap.org/reverse"
+                f"?lat={lat_f}&lon={lon_f}&format=json&accept-language=fr"
+            )
+            geo  = requests.get(
+                geo_url,
+                headers={'User-Agent': 'Myconso2-Frappe/1.0'},
+                timeout=6,
+            ).json()
+            addr = geo.get('address', {})
+            city = (
+                addr.get('city') or addr.get('town') or
+                addr.get('municipality') or addr.get('village') or
+                addr.get('county') or ''
+            )
+        except Exception:
+            pass
+
+        result = {
+            'city':          city,
+            'latitude':      lat_f,
+            'longitude':     lon_f,
+            'temperature':   round(cur.get('temperature_2m') or 0, 1),
+            'feels_like':    round(cur.get('apparent_temperature') or 0, 1),
+            'humidity':      int(cur.get('relativehumidity_2m') or 0),
+            'wind_speed':    round(cur.get('windspeed_10m') or 0, 1),
+            'precipitation': round(cur.get('precipitation') or 0, 1),
+            'weather_code':  int(code),
+            'weather_label': label,
+            'weather_icon':  icon,
+            'time':          local_time,
         }
+
+        _save_meteo_record(result)
+        return result
+
     except Exception as e:
         return {'error': str(e)}
+
+
+@frappe.whitelist()
+def get_weather_data(lat, lon):
+    """Alias de compatibilité → get_current_weather."""
+    return get_current_weather(lat, lon)
+
+
+@frappe.whitelist()
+def get_meteo_history(date_from=None, date_to=None, limit=100):
+    """Retourne l'historique des enregistrements Meteorologie."""
+    filters = {}
+    if date_from and date_to:
+        filters['date_meteo'] = ['between', [date_from, date_to]]
+    elif date_from:
+        filters['date_meteo'] = ['>=', date_from]
+    elif date_to:
+        filters['date_meteo'] = ['<=', date_to]
+
+    rows = frappe.get_all(
+        'Meteorologie',
+        fields=[
+            'date_meteo', 'heure_meteo', 'temperature', 'temperature_ressentie',
+            'humidite', 'vitesse_vent', 'precipitation',
+            'weather_label', 'weather_icon', 'ville',
+        ],
+        filters=filters,
+        order_by='date_meteo desc, heure_meteo desc',
+        page_length=int(limit),
+    )
+    return rows

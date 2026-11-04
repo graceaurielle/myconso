@@ -1,0 +1,145 @@
+{
+ "actions": [],
+ "autoname": "hash",
+ "creation": "2026-06-12 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "date_meteo",
+  "heure_meteo",
+  "temperature",
+  "temperature_ressentie",
+  "humidite",
+  "vitesse_vent",
+  "precipitation",
+  "weather_code",
+  "weather_label",
+  "weather_icon",
+  "ville",
+  "latitude",
+  "longitude"
+ ],
+ "fields": [
+  {
+   "default": "Today",
+   "fieldname": "date_meteo",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "heure_meteo",
+   "fieldtype": "Time",
+   "in_list_view": 1,
+   "label": "Heure",
+   "reqd": 1
+  },
+  {
+   "fieldname": "temperature",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Temp\u00e9rature (\u00b0C)",
+   "precision": "1"
+  },
+  {
+   "fieldname": "temperature_ressentie",
+   "fieldtype": "Float",
+   "label": "Temp\u00e9rature ressentie (\u00b0C)",
+   "precision": "1"
+  },
+  {
+   "fieldname": "humidite",
+   "fieldtype": "Int",
+   "label": "Humidit\u00e9 (%)"
+  },
+  {
+   "fieldname": "vitesse_vent",
+   "fieldtype": "Float",
+   "label": "Vitesse du vent (km/h)",
+   "precision": "1"
+  },
+  {
+   "fieldname": "precipitation",
+   "fieldtype": "Float",
+   "label": "Pr\u00e9cipitations (mm)",
+   "precision": "1"
+  },
+  {
+   "fieldname": "weather_code",
+   "fieldtype": "Int",
+   "label": "Code m\u00e9t\u00e9o (WMO)"
+  },
+  {
+   "fieldname": "weather_label",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Conditions"
+  },
+  {
+   "fieldname": "weather_icon",
+   "fieldtype": "Data",
+   "label": "Ic\u00f4ne"
+  },
+  {
+   "fieldname": "ville",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Ville"
+  },
+  {
+   "fieldname": "latitude",
+   "fieldtype": "Float",
+   "label": "Latitude",
+   "precision": "6"
+  },
+  {
+   "fieldname": "longitude",
+   "fieldtype": "Float",
+   "label": "Longitude",
+   "precision": "6"
+  }
+ ],
+ "links": [],
+ "modified": "2026-11-04 19:45:39.606529",
+ "modified_by": "Administrator",
+ "module": "Myconso2",
+ "name": "Meteorologie",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Chef",
+   "share": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Staticien",
+   "share": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "date_meteo",
+ "sort_order": "DESC",
+ "states": []
+}

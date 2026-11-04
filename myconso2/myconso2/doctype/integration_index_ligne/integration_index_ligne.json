@@ -1,0 +1,26 @@
+{
+ "actions": [],
+ "creation": "2026-11-04 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": ["ligne", "date_index", "heure_index", "valeur_index", "statut", "message"],
+ "fields": [
+  {"fieldname": "ligne", "fieldtype": "Int", "in_list_view": 1, "label": "Ligne fichier", "read_only": 1, "columns": 1},
+  {"fieldname": "date_index", "fieldtype": "Date", "in_list_view": 1, "label": "Date", "read_only": 1, "columns": 2},
+  {"fieldname": "heure_index", "fieldtype": "Time", "in_list_view": 1, "label": "Heure", "read_only": 1, "columns": 1},
+  {"fieldname": "valeur_index", "fieldtype": "Float", "in_list_view": 1, "label": "Index", "read_only": 1, "columns": 2},
+  {"fieldname": "statut", "fieldtype": "Select", "in_list_view": 1, "label": "Statut", "options": "Valide\nDoublon\nAvertissement\nErreur\nImporté", "read_only": 1, "columns": 1},
+  {"fieldname": "message", "fieldtype": "Small Text", "in_list_view": 1, "label": "Message", "read_only": 1, "columns": 3}
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2026-11-04 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Myconso2",
+ "name": "Integration Index Ligne",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "creation",
+ "sort_order": "ASC"
+}

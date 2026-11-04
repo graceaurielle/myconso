@@ -4,7 +4,7 @@
  "docstatus": 0,
  "doctype": "Page",
  "idx": 0,
- "modified": "2026-05-19 22:57:29.233174",
+ "modified": "2026-11-04 20:30:39.959240",
  "modified_by": "Administrator",
  "module": "Myconso2",
  "name": "facture-conso",
@@ -15,7 +15,7 @@
    "role": "Chef"
   },
   {
-   "role": "Statisticien"
+   "role": "Staticien"
   }
  ],
  "script": null,

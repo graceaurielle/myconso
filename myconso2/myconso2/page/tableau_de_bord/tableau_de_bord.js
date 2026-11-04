@@ -182,13 +182,19 @@ class TableauDeBord {
 		            <div class="mc2-meteo-right">
 		              <div class="mc2-meteo-hdr">
 		                <span class="mc2-card-ttl">Météo ${I.cloud}</span>
-		                <button class="mc2-icon-btn">${I.info}</button>
+		                <button class="mc2-icon-btn mc2-meteo-refresh" title="Actualiser la météo">${I.refresh}</button>
 		              </div>
 		              <p class="mc2-meteo-desc" id="mc2-db-meteo-desc">Localisation en cours…</p>
 		            </div>
 		          </div>
 		          <div class="mc2-temp" id="mc2-db-temp">—°c</div>
 		          <div class="mc2-meteo-cond" id="mc2-db-meteo-cond">${I.cloud} —</div>
+		          <div style="font-size:11px;color:#7A8FA6;margin:2px 0 4px;" id="mc2-db-feels-like">Ressenti —°c</div>
+		          <div style="display:flex;gap:10px;font-size:11px;color:#6A7F94;margin-bottom:6px;" id="mc2-db-meteo-stats">
+		            <span id="mc2-db-humidity">💧 —%</span>
+		            <span id="mc2-db-wind">💨 — km/h</span>
+		            <span id="mc2-db-precip">🌧 — mm</span>
+		          </div>
 		          <hr class="mc2-hr">
 		          <div class="mc2-meteo-detail" id="mc2-db-meteo-loc">${I.pin}&nbsp;—</div>
 		          <div class="mc2-meteo-detail" id="mc2-db-meteo-date">${I.cal}&nbsp;—</div>
@@ -227,6 +233,8 @@ class TableauDeBord {
 			e.stopPropagation();
 			this._toggleFacDropdown();
 		});
+		// Bouton Actualiser la météo (force le rechargement sans cache)
+		this.$main.on('click', '.mc2-meteo-refresh', () => this._loadWeather(true));
 	}
 
 	_startClock() {
@@ -425,47 +433,100 @@ class TableauDeBord {
 
 	// ── Météo ─────────────────────────────────────────────────────────────────
 
-	_loadWeather() {
-		// Coordonnées par défaut : Abidjan (si géolocalisation refusée/indisponible)
+	_loadWeather(forceRefresh = false) {
 		const DEFAULT_LAT = 5.3599, DEFAULT_LON = -4.0082;
-		const doCall = (lat, lon) => frappe.call({
-			method: 'myconso2.myconso2.api.get_weather_data',
-			args: { lat, lon },
-			callback: r => {
-				if (r.message && !r.message.error) this._updateWeather(r.message);
-				else this.$main.find('#mc2-db-meteo-desc').text('Météo indisponible');
-			},
-		});
+		const WEATHER_TTL = 10 * 60 * 1000; // 10 min cache météo
+		const GEO_TTL     = 15 * 60 * 1000; // 15 min cache géoloc
+
+		// Si pas forceRefresh, essayer le cache météo
+		if (!forceRefresh) {
+			try {
+				const cached = JSON.parse(localStorage.getItem('mc2_weather') || 'null');
+				if (cached && (Date.now() - cached.ts) < WEATHER_TTL) {
+					this._updateWeather(cached.data);
+					return;
+				}
+			} catch(e) {}
+		}
+
+		const doCall = (lat, lon, isDefault = false) => {
+			if (isDefault) {
+				this.$main.find('#mc2-db-meteo-desc').text('Position par défaut : Abidjan');
+			} else {
+				this.$main.find('#mc2-db-meteo-desc').text('Localisation en cours…');
+			}
+			frappe.call({
+				method: 'myconso2.myconso2.api.get_current_weather',
+				args: { lat, lon },
+				callback: r => {
+					if (r.message && !r.message.error) {
+						try {
+							localStorage.setItem('mc2_weather', JSON.stringify({ ts: Date.now(), data: r.message }));
+						} catch(e) {}
+						this._updateWeather(r.message);
+					} else {
+						this.$main.find('#mc2-db-meteo-desc').text('Météo indisponible');
+					}
+				},
+			});
+		};
+
+		// Vérifier le cache géolocalisation
+		try {
+			const geoCache = JSON.parse(localStorage.getItem('mc2_geo') || 'null');
+			if (geoCache && (Date.now() - geoCache.ts) < GEO_TTL) {
+				doCall(geoCache.lat, geoCache.lon);
+				return;
+			}
+		} catch(e) {}
+
 		if (!navigator.geolocation) {
-			doCall(DEFAULT_LAT, DEFAULT_LON);
+			doCall(DEFAULT_LAT, DEFAULT_LON, true);
 			return;
 		}
 		navigator.geolocation.getCurrentPosition(
-			pos => doCall(pos.coords.latitude, pos.coords.longitude),
-			()  => doCall(DEFAULT_LAT, DEFAULT_LON),
-			{ timeout: 5000, maximumAge: 60000 }
+			pos => {
+				const lat = pos.coords.latitude, lon = pos.coords.longitude;
+				try {
+					localStorage.setItem('mc2_geo', JSON.stringify({ ts: Date.now(), lat, lon }));
+				} catch(e) {}
+				doCall(lat, lon);
+			},
+			() => doCall(DEFAULT_LAT, DEFAULT_LON, true),
+			{ timeout: 5000, maximumAge: 300000 }
 		);
 	}
 
 	_updateWeather(w) {
-		const desc = WMO_DESC[w.weathercode] || '—';
-		const loc  = w.city ? `${w.city}${w.country ? ', ' + w.country : ''}` : '—';
-		const now  = new Date();
+		const icon  = w.weather_icon  || '';
+		const label = w.weather_label || WMO_DESC[w.weather_code || w.weathercode] || '—';
+		const loc   = w.city || 'Votre position actuelle';
+		const now   = new Date();
 		const months = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 		const pad = n => String(n).padStart(2,'0');
 		const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}, ${pad(now.getHours())}:${pad(now.getMinutes())}`;
-		const pinSvg   = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7A8FA6" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
-		const calSvg   = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7A8FA6" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`;
-		const cloudSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>`;
+		const pinSvg = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7A8FA6" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
+		const calSvg = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7A8FA6" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`;
 
-		this.$main.find('#mc2-db-temp').text(`${Math.round(w.temperature || 0)}°c`);
-		this.$main.find('#mc2-db-meteo-cond').html(`${cloudSvg} ${desc}`);
+		const code      = w.weather_code || w.weathercode || 0;
+		const temp      = w.temperature   != null ? w.temperature   : (w.temperature_2m || 0);
+		const feelsLike = w.feels_like    != null ? w.feels_like    : (w.apparent_temperature || temp);
+		const humidity  = w.humidity      != null ? w.humidity      : (w.relativehumidity_2m || '—');
+		const windSpeed = w.wind_speed    != null ? w.wind_speed    : (w.windspeed_10m || '—');
+		const precip    = w.precipitation != null ? w.precipitation : '—';
+
+		this.$main.find('#mc2-db-temp').text(`${Math.round(temp)}°c`);
+		this.$main.find('#mc2-db-meteo-cond').text(`${icon} ${label}`);
+		this.$main.find('#mc2-db-feels-like').text(`Ressenti ${Math.round(feelsLike)}°c`);
+		this.$main.find('#mc2-db-humidity').text(`💧 ${humidity}%`);
+		this.$main.find('#mc2-db-wind').text(`💨 ${windSpeed} km/h`);
+		this.$main.find('#mc2-db-precip').text(`🌧 ${precip} mm`);
 		this.$main.find('#mc2-db-meteo-loc').html(`${pinSvg}&nbsp;${loc}`);
 		this.$main.find('#mc2-db-meteo-date').html(`${calSvg}&nbsp;${dateStr}`);
 
 		const coolCodes = new Set([0,1,2,3,45,48,51,53,55,61,63,65,80,81,82]);
 		this.$main.find('#mc2-db-meteo-desc').text(
-			coolCodes.has(w.weathercode)
+			coolCodes.has(code)
 				? 'Ce temps est susceptible de faire baisser votre consommation !'
 				: 'Ce temps peut augmenter votre consommation électrique.'
 		);

@@ -1285,44 +1285,49 @@
 
 /* ---- Left card ---- */
 .mc2-fp-left-card {
-  flex: 0 0 510px;
-  height: 597px;
+  flex: 0 0 420px;
   background: #ffffff;
   border-radius: 20px;
-  position: relative;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 40px;
+  box-sizing: border-box;
 }
 
 .mc2-fp-left-title {
-  position: absolute;
-  left: 95px;
-  top: 36px;
   font-family: 'Inter', sans-serif;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
   color: #0E3151;
-  white-space: nowrap;
+  margin-bottom: 24px;
+}
+
+.mc2-fp-field {
+  margin-bottom: 16px;
 }
 
 .mc2-fp-label {
-  position: absolute;
-  left: 96px;
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  font-weight: 400;
+  font-size: 13px;
+  font-weight: 500;
   color: #0E3151;
+  display: block;
+  margin-bottom: 6px;
 }
 
 .mc2-fp-input-box {
-  position: absolute;
-  left: 96px;
-  width: 317px;
-  height: 45px;
-  background: #FAFAFA;
-  border-radius: 5px;
-  box-shadow: inset 0px 0px 1px 0px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  height: 44px;
+  background: #f5f7fa;
+  border: 1.5px solid #c8d3e0;
+  border-radius: 8px;
   display: flex;
   align-items: center;
+  transition: border-color 0.2s;
+}
+
+.mc2-fp-input-box:focus-within {
+  border-color: #506f92;
 }
 
 .mc2-fp-input {
@@ -1331,15 +1336,15 @@
   background: transparent;
   border: none;
   outline: none;
-  padding: 0 12px;
-  font-family: 'NotoSans', sans-serif;
+  padding: 0 14px;
+  font-family: 'Inter', sans-serif;
   font-size: 14px;
-  color: rgba(21, 52, 83, 0.60);
+  color: #153453;
   box-sizing: border-box;
 }
 
 .mc2-fp-input::placeholder {
-  color: rgba(21, 52, 83, 0.60);
+  color: #9caab9;
 }
 
 /* Remove number input arrows */
@@ -1350,10 +1355,7 @@
 }
 
 .mc2-fp-predict-btn {
-  position: absolute;
-  left: 96px;
-  top: 342px;
-  width: 317px;
+  width: 100%;
   height: 44px;
   border-radius: 8px;
   background: linear-gradient(148.52deg, rgba(97, 141, 185, 1) 0%, rgba(14, 49, 81, 1) 100%);
@@ -1369,6 +1371,9 @@
   font-weight: 400;
   color: #ffffff;
   letter-spacing: -0.03em;
+  margin-top: 6px;
+  margin-bottom: 0;
+  flex-shrink: 0;
 }
 
 .mc2-fp-predict-icon {
@@ -1378,21 +1383,25 @@
 }
 
 .mc2-fp-result-box {
-  position: absolute;
-  left: 96px;
-  top: 421px;
-  width: 317px;
-  height: 86px;
+  margin-top: 20px;
+  width: 100%;
   background: #FAFAFA;
-  border-radius: 5px;
+  border-radius: 10px;
   box-shadow: inset 0px 0px 1px 0px rgba(0, 0, 0, 0.25);
+  flex-direction: column;
+  padding: 20px 22px;
+  box-sizing: border-box;
+}
+
+.mc2-fp-result-header {
   display: flex;
-  align-items: center;
-  padding-left: 14px;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 10px;
 }
 
 .mc2-fp-result-main {
-  font-size: 36px;
+  font-size: 34px;
   font-weight: 700;
   color: #294570;
   font-family: 'Inter', sans-serif;
@@ -1400,13 +1409,26 @@
 }
 
 .mc2-fp-result-unit {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   color: #294570;
   font-family: 'Inter', sans-serif;
-  margin-left: 3px;
-  align-self: flex-end;
-  margin-bottom: 6px;
+}
+
+.mc2-fp-result-divider {
+  height: 1px;
+  background: rgba(41, 69, 112, 0.15);
+  margin-bottom: 12px;
+}
+
+.mc2-fp-breakdown {
+  font-size: 12.5px;
+  color: #506f92;
+  line-height: 1.9;
+}
+
+.mc2-fp-breakdown b {
+  color: #153453;
 }
 
 .mc2-fp-link-full {

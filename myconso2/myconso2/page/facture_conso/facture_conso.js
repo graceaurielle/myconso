@@ -44,29 +44,34 @@ class FactureConsoPage {
 		<div class="mc2-fp-wrapper">
 
 		  <div class="mc2-fp-left-card">
-		    <div class="mc2-fp-left-title">Prédire ma facture</div>
+		    <div class="mc2-fp-left-title">Calculer cette facture</div>
 
-		    <div class="mc2-fp-label" style="top:124px;">Index Début</div>
-		    <div class="mc2-fp-input-box" style="top:150px;">
-		      <input id="mc2-fp-idx-debut" class="mc2-fp-input" type="number" step="0.01" placeholder="Ex: 15 000" />
+		    <div class="mc2-fp-field">
+		      <label class="mc2-fp-label">Index Début</label>
+		      <div class="mc2-fp-input-box">
+		        <input id="mc2-fp-idx-debut" class="mc2-fp-input" type="number" step="0.01" placeholder="Ex: 15 000" />
+		      </div>
 		    </div>
 
-		    <div class="mc2-fp-label" style="top:210px;">Index Fin</div>
-		    <div class="mc2-fp-input-box" style="top:234px;">
-		      <input id="mc2-fp-idx-fin" class="mc2-fp-input" type="number" step="0.01" placeholder="Ex: 15 200" />
+		    <div class="mc2-fp-field">
+		      <label class="mc2-fp-label">Index Fin</label>
+		      <div class="mc2-fp-input-box">
+		        <input id="mc2-fp-idx-fin" class="mc2-fp-input" type="number" step="0.01" placeholder="Ex: 15 200" />
+		      </div>
 		    </div>
 
 		    <button id="mc2-fp-calc-btn" class="mc2-fp-predict-btn">
 		      <span class="mc2-fp-predict-icon">${PREDICT_ICON}</span>
-		      Prédire ma facture
+		      Calculer cette facture
 		    </button>
 
-		    <div id="mc2-fp-result-wrap" class="mc2-fp-result-box" style="display:none;flex-direction:column;height:auto;padding:16px 20px;">
-		      <div style="margin-bottom:6px;">
+		    <div id="mc2-fp-result-wrap" class="mc2-fp-result-box" style="display:none;">
+		      <div class="mc2-fp-result-header">
 		        <span id="mc2-fp-result-main" class="mc2-fp-result-main">0</span>
 		        <span class="mc2-fp-result-unit">FCFA</span>
 		      </div>
-		      <div id="mc2-fp-breakdown" style="font-size:12px;color:#7A8FA6;line-height:1.8;"></div>
+		      <div class="mc2-fp-result-divider"></div>
+		      <div id="mc2-fp-breakdown" class="mc2-fp-breakdown"></div>
 		    </div>
 		  </div>
 
@@ -125,16 +130,21 @@ class FactureConsoPage {
 					const tva_lbl = `TVA ${d.tva_taux_pct || 18} %`;
 					this.$root.find('#mc2-fp-result-main').text(fmt(d.total));
 					this.$root.find('#mc2-fp-breakdown').html(
-						`Code Tarif : <b>Code ${codeNum}</b><br>` +
-						`Consommation : <b>${fmt(d.kwh)} kWh</b>` +
-						((d.kwh_t2 > 0)
-							? ` &nbsp;(T1 : ${fmt(d.kwh_t1)} kWh × ${d.tarif_t1} + T2 : ${fmt(d.kwh_t2)} kWh × ${d.tarif_t2})`
-							: ` &nbsp;(T1 : ${fmt(d.kwh_t1)} kWh × ${d.tarif_t1})`) +
-						`<br>Énergie HT : <b>${fmt(d.energy_ht)} FCFA</b><br>` +
-						`Prime fixe HT : <b>${fmt(d.prime_ht)} FCFA</b><br>` +
-						`Sous-total HT : <b>${fmt(d.sous_total_ht)} FCFA</b><br>` +
-						`${tva_lbl} : <b>${fmt(d.tva)} FCFA</b><br>` +
-						`CO₂ estimé : <b>${d.co2 || 0} kg</b>`
+						`<table style="width:100%;border-collapse:collapse;font-size:12.5px;color:#506f92;">` +
+						`<tr><td style="padding:3px 0;">Code Tarif</td><td style="text-align:right;padding:3px 0;"><b>Code ${codeNum}</b></td></tr>` +
+						`<tr><td>Consommation</td><td style="text-align:right;"><b>${fmt(d.kwh)} kWh</b></td></tr>` +
+						(d.kwh_t2 > 0
+							? `<tr><td style="padding-left:10px;">↳ T1</td><td style="text-align:right;">${fmt(d.kwh_t1)} kWh × ${d.tarif_t1}</td></tr>` +
+							  `<tr><td style="padding-left:10px;">↳ T2</td><td style="text-align:right;">${fmt(d.kwh_t2)} kWh × ${d.tarif_t2}</td></tr>`
+							: `<tr><td style="padding-left:10px;">↳ T1</td><td style="text-align:right;">${fmt(d.kwh_t1)} kWh × ${d.tarif_t1}</td></tr>`) +
+						`<tr><td colspan="2" style="padding:4px 0;"><hr style="border:0;border-top:1px solid rgba(41,69,112,0.1);"></td></tr>` +
+						`<tr><td>Énergie HT</td><td style="text-align:right;"><b>${fmt(d.energy_ht)} FCFA</b></td></tr>` +
+						`<tr><td>Prime fixe HT</td><td style="text-align:right;"><b>${fmt(d.prime_ht)} FCFA</b></td></tr>` +
+						`<tr><td>Sous-total HT</td><td style="text-align:right;"><b>${fmt(d.sous_total_ht)} FCFA</b></td></tr>` +
+						`<tr><td>${tva_lbl}</td><td style="text-align:right;"><b>${fmt(d.tva)} FCFA</b></td></tr>` +
+						`<tr><td colspan="2" style="padding:4px 0;"><hr style="border:0;border-top:1px solid rgba(41,69,112,0.1);"></td></tr>` +
+						`<tr><td>CO₂ estimé</td><td style="text-align:right;"><b>${d.co2 || 0} kg</b></td></tr>` +
+						`</table>`
 					);
 					this.$root.find('#mc2-fp-result-wrap').show();
 				}
@@ -225,7 +235,7 @@ class FactureConsoPage {
 		.cie2-dates b{color:#153453}
 		.cie2-tbl{width:100%;border-collapse:separate;border-spacing:0 5px;margin:12px 0}
 		.cie2-hdr th{
-			background:linear-gradient(90deg,rgba(80,111,146,1) 32.4%,rgba(225,135,125,1) 100%);
+			background:#506f92;
 			color:#fff;font-weight:600;font-size:13px;text-align:center;
 			padding:10px 6px;vertical-align:middle;line-height:1.3
 		}
@@ -246,14 +256,14 @@ class FactureConsoPage {
 		.cie2-total td.cl{background:#506f92;color:#fff}
 		.cie2-total td.cl:first-child{border-radius:10px 0 0 10px}
 		.cie2-total td.cg{
-			background:linear-gradient(90deg,rgba(80,111,146,1) 0%,rgba(225,135,125,1) 100%);
+			background:#506f92;
 			color:#fff
 		}
 		.cie2-total td.cg:last-child{border-radius:0 10px 10px 0}
 		.cie2-footer{display:flex;flex-direction:column;align-items:flex-end;margin-top:20px}
 		.cie2-footer-label{font-size:16px;color:#153453;margin-bottom:8px}
 		.cie2-badge{
-			background:linear-gradient(89.8deg,rgba(80,111,146,1) 0%,rgba(225,135,125,1) 100%);
+			background:rgba(225,135,125,1);
 			border-radius:15px;padding:14px 32px;color:#fff;
 			display:inline-flex;align-items:baseline;gap:4px
 		}

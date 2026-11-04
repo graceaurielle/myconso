@@ -1,7 +1,7 @@
 {
  "actions": [],
  "autoname": "hash",
- "creation": "2026-05-20 00:00:00.000000",
+ "creation": "2026-05-20 00:00:00",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -35,7 +35,7 @@
   }
  ],
  "links": [],
- "modified": "2026-05-20 00:00:00.000000",
+ "modified": "2026-11-04 19:45:36.827048",
  "modified_by": "Administrator",
  "module": "Myconso2",
  "name": "Index Conso",
@@ -56,11 +56,37 @@
   {
    "create": 1,
    "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
    "read": 1,
-   "role": "All",
+   "report": 1,
+   "role": "Chef",
+   "share": 1,
    "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Collecteur",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Staticien",
+   "share": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "date_index",
  "sort_order": "DESC",
  "states": [],

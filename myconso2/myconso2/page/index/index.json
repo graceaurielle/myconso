@@ -5,7 +5,7 @@
  "doctype": "Page",
  "icon": "gauge",
  "idx": 0,
- "modified": "2026-05-19 13:48:42.739330",
+ "modified": "2026-11-04 19:45:34.018214",
  "modified_by": "Administrator",
  "module": "Myconso2",
  "name": "index",
@@ -16,10 +16,10 @@
    "role": "Chef"
   },
   {
-   "role": "Statisticien"
+   "role": "Collecteur"
   },
   {
-   "role": "Collecteur"
+   "role": "Staticien"
   }
  ],
  "script": null,
